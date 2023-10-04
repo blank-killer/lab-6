@@ -1,0 +1,112 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Node structure
+typedef struct Node {
+    int data;
+    struct Node* next;
+} Node;
+
+// Stack structure
+typedef struct {
+    Node* top;
+} Stack;
+
+// Function to initialize the stack
+void initialize(Stack* s) {
+    s->top = NULL;
+}
+
+// Function to check if the stack is empty
+int is_empty(Stack* s) {
+    return s->top == NULL;
+}
+
+// Function to create a new node
+Node* create_node(int data) {
+    Node* new_node = (Node*)malloc(sizeof(Node));
+    new_node->data = data;
+    new_node->next = NULL;
+    return new_node;
+}
+
+// Function to push an element onto the stack
+void push(Stack* s, int element) {
+    Node* new_node = create_node(element);
+    new_node->next = s->top;
+    s->top = new_node;
+    printf("Pushed element: %d\n", element);
+}
+
+// Function to pop an element from the stack
+void pop(Stack* s) {
+    if (is_empty(s)) {
+        printf("Stack Underflow! Cannot pop element.\n");
+    } else {
+        Node* temp = s->top;
+        int element = temp->data;
+        s->top = temp->next;
+        free(temp);
+        printf("Popped element: %d\n", element);
+    }
+}
+
+// Function to display the stack elements
+void display(Stack* s) {
+    if (is_empty(s)) {
+        printf("Stack is empty.\n");
+    } else {
+        Node* current = s->top;
+        printf("Stack elements:\n");
+        while (current != NULL) {
+            printf("%d\n", current->data);
+            current = current->next;
+        }
+    }
+}
+
+int main() {
+    Stack stack;
+    initialize(&stack);
+
+    int choice, element;
+
+    while (1) {
+        printf("\n----- Stack Operations -----\n");
+        printf("1. Push\n");
+        printf("2. Pop\n");
+        printf("3. Check if stack is empty\n");
+        printf("4. Display stack elements\n");
+        printf("5. Exit\n");
+
+        printf("Enter your choice (1-5): ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                printf("Enter the element to push: ");
+                scanf("%d", &element);
+                push(&stack, element);
+                break;
+            case 2:
+                pop(&stack);
+                break;
+            case 3:
+                if (is_empty(&stack)) {
+                    printf("Stack is empty.\n");
+                } else {
+                    printf("Stack is not empty.\n");
+                }
+                break;
+            case 4:
+                display(&stack);
+                break;
+            case 5:
+                return 0;
+            default:
+                printf("Invalid choice. Please try again.\n");
+        }
+    }
+
+    return 0;
+}
